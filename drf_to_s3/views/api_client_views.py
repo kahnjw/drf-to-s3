@@ -31,6 +31,11 @@ class SignedPutURIView(APIView):
         from drf_to_s3.access_control import upload_prefix_for_request
 
         serializer = self.get_serializer(data=request.DATA)
+
+        if not serializer.valid():
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         content_type = serializer.data['content_type']
 
         key = '%s/%s' % (upload_prefix_for_request(request), str(uuid.uuid4()))
