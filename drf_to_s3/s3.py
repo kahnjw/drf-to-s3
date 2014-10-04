@@ -30,11 +30,11 @@ def sign_rest_request(secret_key, method, content_md5='', content_type='', expir
     string_to_sign = "\n".join([method, content_md5, content_type, str(expires), canonicalized_headers, canonicalized_resource])
     return base64.b64encode(hmac.new(secret_key, string_to_sign, hashlib.sha1).digest())
 
-def build_signed_upload_uri(bucket, key, access_key_id, secret_key, expire_after_seconds):
+def build_signed_upload_uri(bucket, key, access_key_id, secret_key, expire_after_seconds, content_type):
     '''
     Accept bucket name, bucket key and s3 credentials as input
     Return signed_url for PUT upload.
-    
+
     http://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html#RESTAuthenticationExamples
     '''
 
@@ -49,6 +49,7 @@ def build_signed_upload_uri(bucket, key, access_key_id, secret_key, expire_after
     signature = sign_rest_request(
         secret_key,
         method='PUT',
+        content_type=content_type,
         expires=expires,
         canonicalized_headers='x-amz-acl:private',
         canonicalized_resource=urllib.quote("/%s/%s" % (bucket, key))
