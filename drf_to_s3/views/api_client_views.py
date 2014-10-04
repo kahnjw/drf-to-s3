@@ -32,7 +32,7 @@ class SignedPutURIView(APIView):
 
         serializer = self.serializer_class(data=request.DATA)
 
-        if not serializer.valid():
+        if not serializer.is_valid():
             return Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
