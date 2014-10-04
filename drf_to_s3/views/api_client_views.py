@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from drf_to_s3.views import BaseUploadCompletionView
+from drf_to_s3.serializers import SignedPutSerializer
 
 
 class SignedPutURIView(APIView):
@@ -7,6 +8,7 @@ class SignedPutURIView(APIView):
     Generate a signed url for the user to upload a file to S3.
 
     '''
+    serializer_class = SignedPutSerializer
     expire_after_seconds = 300
 
     def get_aws_upload_bucket(self):
@@ -28,9 +30,10 @@ class SignedPutURIView(APIView):
         from drf_to_s3 import s3
         from drf_to_s3.access_control import upload_prefix_for_request
 
-        key = '%s/%s' % (upload_prefix_for_request(request), str(uuid.uuid4()))
-        content_type = request.QUERY_PARAMS.get('upload_content_type', '')
+        serializer = self.get_serializer(data=request.DATA)
+        content_type = serializer.data['content_type']
 
+        key = '%s/%s' % (upload_prefix_for_request(request), str(uuid.uuid4()))
         upload_uri = s3.build_signed_upload_uri(
             bucket=self.get_aws_upload_bucket(),
             key=key,

@@ -16,10 +16,10 @@ with open(requirements_file, 'r') as f:
 from setuptools import setup
 
 setup(
-    name = 'drf_to_s3',
+    name = 'drf_s3_upload',
     version = __import__('drf_to_s3').__version__,
     author = 'Body Labs',
-    author_email = 'paul.melnikow@bodylabs.com',
+    author_email = 'jarrod.kahn@gmail.com',
     description = 'Django REST Framework Interface for direct upload to S3',
     long_description = long_description,
     url = 'https://github.com/bodylabs/drf-to-s3',

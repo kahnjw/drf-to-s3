@@ -1,6 +1,11 @@
 from drf_to_s3 import naive_serializers
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext as _
+from rest_framework import serializers
+
+
+class SignedPutSerializer(serializers.Serializer):
+    content_type = serializers.CharField(max_length=200)
 
 
 class DefaultPolicySerializer(naive_serializers.NaivePolicySerializer):
