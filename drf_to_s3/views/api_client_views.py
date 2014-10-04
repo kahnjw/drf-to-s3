@@ -1,4 +1,3 @@
-from django.utils.translation import ugettext as _
 from rest_framework.views import APIView
 from drf_to_s3.views import BaseUploadCompletionView
 
@@ -30,12 +29,15 @@ class SignedPutURIView(APIView):
         from drf_to_s3.access_control import upload_prefix_for_request
 
         key = '%s/%s' % (upload_prefix_for_request(request), str(uuid.uuid4()))
+        content_type = request.QUERY_PARAMS.get('upload_content_type', '')
+
         upload_uri = s3.build_signed_upload_uri(
             bucket=self.get_aws_upload_bucket(),
             key=key,
             access_key_id=self.get_aws_access_key_id(),
             secret_key=self.get_aws_secret_key(),
-            expire_after_seconds=self.expire_after_seconds
+            expire_after_seconds=self.expire_after_seconds,
+            content_type=content_type
         )
         data = {
             'key': key,
