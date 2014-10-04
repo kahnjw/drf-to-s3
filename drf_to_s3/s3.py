@@ -28,9 +28,6 @@ def sign_rest_request(secret_key, method, content_md5='', content_type='', expir
     '''
     import base64, hashlib, hmac
     string_to_sign = "\n".join([method, content_md5, content_type, str(expires), canonicalized_headers, canonicalized_resource])
-    print '============='
-    print string_to_sign
-    print '============='
     return base64.b64encode(hmac.new(secret_key, string_to_sign, hashlib.sha1).digest())
 
 def build_signed_upload_uri(bucket, key, access_key_id, secret_key, expire_after_seconds, content_type):
