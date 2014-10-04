@@ -30,7 +30,7 @@ class SignedPutURIView(APIView):
         from drf_to_s3 import s3
         from drf_to_s3.access_control import upload_prefix_for_request
 
-        serializer = self.get_serializer(data=request.DATA)
+        serializer = self.serializer_class(data=request.DATA)
 
         if not serializer.valid():
             return Response(
